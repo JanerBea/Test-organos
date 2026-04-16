@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valoración de Estrés Orgánico - Bea Janer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d0c0a;--surface:#141310;--gold:#e8d4a8;--gold-dim:#e8d4a8;
+  --gold-light:#f0e8d8;--cream:#f0e8d8;--cream-dim:#b8a88a;
+  --text-dim:#c9a96e;--border:rgba(201,169,110,0.15);
+  --c1:#6a8f7a;--c2:#8fa882;--c3:#c9a96e;--c4:#c48a50;--c5:#c96060;
+}
+body{background:var(--bg);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;min-height:100vh}
+.screen{display:none}.screen.active{display:block}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px}
+#intro.active{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:60px 24px}
+.eyebrow{font-size:13px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.main-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(26px,6vw,44px);line-height:1.15;margin-bottom:10px}
+.main-title em{color:var(--gold-light)}
+.sub{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-dim);margin-bottom:32px}
+.divider{width:1px;height:32px;background:linear-gradient(to bottom,transparent,var(--gold-dim),transparent);margin:0 auto 32px}
+.intro-desc{font-size:14px;line-height:1.95;color:var(--cream-dim);max-width:440px;margin-bottom:36px}
+.legend-box{background:var(--surface);border:1px solid var(--border);padding:24px 26px;margin-bottom:40px;width:100%;max-width:460px}
+.legend-title{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:14px}
+.legend-note{font-size:13px;color:var(--gold-light);line-height:1.7;margin-bottom:16px;padding:12px;background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.15)}
+.legend-item{display:flex;align-items:flex-start;gap:16px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);text-align:left}
+.legend-item:last-child{border-bottom:none}
+.legend-num{width:44px;height:44px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:20px;font-family:'Cormorant Garamond',serif;border:1px solid rgba(240,232,216,0.3);background:rgba(240,232,216,0.06);color:#f0e8d8;flex-shrink:0}
+.legend-text{display:flex;flex-direction:column;gap:3px;text-align:left}
+.legend-main{font-size:13px;color:var(--cream)}
+.legend-desc{font-size:13px;color:var(--text-dim);line-height:1.5}
+.btn-gold{background:transparent;border:1px solid var(--gold-dim);color:var(--gold-light);font-family:'Jost',sans-serif;font-weight:300;font-size:13px;letter-spacing:.3em;text-transform:uppercase;padding:17px 48px;cursor:pointer}
+#datos.active{display:block;padding:48px 0 80px;min-height:100vh}
+.page-header{padding:22px 0 26px;border-bottom:1px solid var(--border);margin-bottom:40px;display:flex;align-items:center;justify-content:space-between}
+.page-brand{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:14px;color:var(--gold-dim)}
+.page-step{font-size:14px;color:var(--text-dim)}
+.datos-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:22px;color:var(--cream);margin-bottom:8px}
+.datos-sub{font-size:14px;color:var(--text-dim);margin-bottom:32px;line-height:1.7}
+.form-group{margin-bottom:20px}
+.form-label{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);display:block;margin-bottom:10px}
+.form-input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;font-size:14px;padding:14px 16px;outline:none}
+.form-input::placeholder{color:var(--text-dim)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.form-row .form-group{margin-bottom:0}.form-row .form-label{margin-bottom:10px}.form-row .form-input{margin-top:0}
+.form-error{color:#c97070;font-size:13px;margin-top:6px;display:none}
+.datos-note{font-size:13px;color:var(--text-dim);line-height:1.7;margin-bottom:32px;padding:16px;border:1px solid var(--border);background:var(--surface)}
+#quiz.active{display:block;padding-bottom:80px}
+.quiz-header{padding:22px 0 26px;border-bottom:1px solid var(--border);margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10}
+.quiz-brand{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:14px;color:var(--gold-dim)}
+.progress-wrap{display:flex;align-items:center;gap:12px}
+.prog-count{font-size:14px;color:var(--text-dim)}
+.prog-bar{width:90px;height:2px;background:rgba(255,255,255,.07)}
+.prog-fill{height:100%;background:linear-gradient(to right,var(--gold-dim),var(--gold));transition:width .4s ease;width:0%}
+.q-card{border:1px solid var(--border);background:var(--surface);padding:26px 22px;margin-bottom:10px;position:relative}
+.q-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,rgba(139,110,62,.8),transparent)}
+.q-num{font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px}
+.q-hint{font-size:13px;color:var(--text-dim);margin-bottom:10px;letter-spacing:.08em}
+.q-phrase{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;line-height:1.55;color:var(--cream);margin-bottom:22px}
+.scale-row{display:flex;gap:4px;align-items:stretch}
+.scale-btn{flex:1;min-height:54px;border:1px solid rgba(240,232,216,0.2);background:transparent;color:var(--cream-dim);font-family:'Jost',sans-serif;font-size:10px;cursor:pointer;border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px;text-align:center;line-height:1.2;overflow:hidden}
+.scale-btn .s-num{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1;color:#f0e8d8}
+.scale-btn .s-lbl{font-size:9px;letter-spacing:.02em;color:var(--cream-dim);white-space:nowrap}
+.scale-btn.sel-1{border-color:var(--c1)!important;background:rgba(106,143,122,.13)!important;color:var(--c1)!important}
+.scale-btn.sel-2{border-color:var(--c2)!important;background:rgba(143,168,130,.13)!important;color:var(--c2)!important}
+.scale-btn.sel-3{border-color:var(--c3)!important;background:rgba(201,169,110,.13)!important;color:var(--c3)!important}
+.scale-btn.sel-4{border-color:var(--c4)!important;background:rgba(196,138,80,.13)!important;color:var(--c4)!important}
+.scale-btn.sel-5{border-color:var(--c5)!important;background:rgba(201,96,96,.13)!important;color:var(--c5)!important}
+.error-msg{text-align:center;color:#c97070;font-size:14px;padding:16px;display:none}
+.submit-wrap{text-align:center;padding-top:40px}
+#results.active{display:block;padding-bottom:80px}
+.results-hero{text-align:center;padding:56px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px}
+.results-name{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(22px,5vw,34px);color:var(--cream);margin-bottom:8px}
+.results-name em{font-style:italic;color:var(--gold-light)}
+.results-sub{font-size:14px;color:var(--text-dim);margin-bottom:6px}
+.results-date{font-size:14px;color:var(--text-dim)}
+.sec-label{font-size:13px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-dim);display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.urgency-badge{display:inline-block;font-size:8px;letter-spacing:.3em;text-transform:uppercase;padding:5px 14px;border:1px solid;margin-bottom:20px}
+.urgency-critico{color:#c96060;border-color:rgba(201,96,96,.4);background:rgba(201,96,96,.08)}
+.urgency-activo{color:#c4885a;border-color:rgba(196,138,80,.4);background:rgba(196,138,80,.08)}
+.urgency-latente{color:#c9a96e;border-color:rgba(201,169,110,.4);background:rgba(201,169,110,.08)}
+.urgency-leve{color:#7a9e7e;border-color:rgba(122,158,126,.4);background:rgba(122,158,126,.08)}
+.primary-card{border:1px solid rgba(201,169,110,.3);background:var(--surface);padding:32px 28px;margin-bottom:16px;position:relative}
+.primary-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--gold-dim),transparent)}
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.score-bar-w{flex:1;height:3px;background:rgba(255,255,255,.06);border-radius:2px}
+.score-bar-f{height:100%;background:linear-gradient(to right,var(--gold-dim),var(--gold));border-radius:2px}
+.score-pct{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold)}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--cream);margin-bottom:6px}
+.card-essence{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--gold-light);margin-bottom:22px}
+.card-inner-label{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px}
+.card-text{font-size:13px;line-height:1.9;color:var(--cream-dim);margin-bottom:24px}
+.benefit-list{list-style:none}
+.benefit-list li{display:flex;gap:12px;margin-bottom:10px;font-size:13px;line-height:1.7;color:var(--cream-dim)}
+.benefit-list li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--gold);margin-top:7px;flex-shrink:0}
+.secondary-card{border:1px solid var(--border);background:var(--surface);padding:24px;margin-bottom:12px;position:relative}
+.secondary-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,rgba(139,110,62,.6),transparent)}
+.sec-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.sec-rank{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px}
+.sec-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--cream)}
+.sec-pct{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-dim)}
+.mini-bar{height:2px;background:rgba(255,255,255,.05);margin-bottom:16px}
+.mini-bar-f{height:100%;background:var(--gold-dim)}
+.sec-organ-lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:0.75;margin-top:3px}
+.sec-essence{font-family:''Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--gold-light);margin-bottom:10px}
+.sec-text{font-size:14px;line-height:1.85;color:var(--cream-dim)}
+.map-card{border:1px solid var(--border);background:var(--surface);padding:28px 24px;margin-bottom:0}
+.map-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.map-row:last-child{margin-bottom:0}
+.map-name{width:160px;font-size:15px;color:var(--cream-dim);flex-shrink:0;line-height:1.3}
+.map-name.top{color:var(--cream);font-weight:400}
+.map-bar{flex:1;height:3px;background:rgba(255,255,255,.07)}
+.map-bar-f{height:100%}
+.map-pct{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text-dim);min-width:44px;text-align:right}
+.map-pct.top{color:var(--gold)}
+.send-box{border:1px solid var(--border);background:var(--surface);padding:36px 24px;margin-top:32px;margin-bottom:0;text-align:center}
+.send-title{font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:18px}
+.send-text{font-size:14px;color:var(--cream-dim);line-height:1.75;max-width:300px;margin:0 auto 28px;text-align:center}
+.wa-btn{border:none;color:#fff;font-family:'Jost',sans-serif;font-weight:400;font-size:16px;letter-spacing:.03em;padding:18px 36px;cursor:pointer;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;gap:12px;width:100%;max-width:340px}
+.wa-btn-bea{background:#25D366}
+.footer{text-align:center;padding:44px 0 48px}
+.footer p{font-size:13px;color:var(--text-dim);line-height:1.9;max-width:420px;margin:0 auto 20px}
+.footer em{color:var(--gold-dim)}
+.btn-ghost{background:transparent;border:1px solid rgba(240,232,216,0.12);color:var(--text-dim);font-family:'Jost',sans-serif;font-weight:300;font-size:10px;letter-spacing:.25em;text-transform:uppercase;padding:12px 28px;cursor:pointer}
+@medía(max-width:500px){.form-row{grid-template-columns:1fr}.scale-btn{min-height:48px}.map-name{width:105px;font-size:14px}}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro" class="screen active">
+  <svg width="44" height="44" viewBox="0 0 64 64" fill="none" style="margin-bottom:28px">
+    <polygon points="32,4 60,56 4,56" stroke="#e8d4a8" stroke-width="1" fill="none" opacity="0.9"/>
+    <polygon points="32,60 4,8 60,8" stroke="#e8d4a8" stroke-width="1" fill="none" opacity="0.7"/>
+    <circle cx="32" cy="32" r="4" fill="#c9a96e" opacity="0.9"/>
+  </svg>
+  <div class="eyebrow">Bea Janer - Terapeuta Holística</div>
+  <h1 class="main-title">Valoración de<br><em>Estrés Orgánico</em></h1>
+  <div class="sub">Test de Lenguaje Corporal Energético</div>
+  <div class="divider"></div>
+  <p class="intro-desc">El cuerpo habla a traves del lenguaje. Las frases que usamos en el día a día revelan que zonas energéticas estan acumulando estrés.<br><br><strong style="color:var(--gold-light)">Importante:</strong> No estamos valorando si estas frases son verdad o no. Estamos valorando si las dices, las piensas o las sientes. Responde desde el reconocimiento, no desde la logica.</p>
+  <div class="legend-box">
+    <div class="legend-title">Cómo responder</div>
+    <div class="legend-note">¿Con qué frecuencia dices, piensas o sientes esta frase? No importa si es verdad o no, solo si la reconoces en ti.</div>
+    <div class="legend-item">
+      <div class="legend-num">1</div>
+      <div class="legend-text"><div class="legend-main">Nunca</div><div class="legend-desc">Esta frase no me representa</div></div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-num">2</div>
+      <div class="legend-text"><div class="legend-main">Poco</div><div class="legend-desc">Me resuena algo pero no es habitual</div></div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-num">3</div>
+      <div class="legend-text"><div class="legend-main">A veces</div><div class="legend-desc">Pienso así ocasíonalmente</div></div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-num">4</div>
+      <div class="legend-text"><div class="legend-main">Bastante</div><div class="legend-desc">Lo pienso con frecuencia</div></div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-num">5</div>
+      <div class="legend-text"><div class="legend-main">Siempre</div><div class="legend-desc">Me siento totalmente reflejada</div></div>
+    </div>
+  </div>
+  <button class="btn-gold" onclick="goToDatos()">Comenzar</button>
+  <div style="margin-top:14px;font-size:14px;color:var(--text-dim)">50 frases - aprox. 5 minutos</div>
+</div>
+
+<!-- DATOS -->
+<div id="datos" class="screen">
+  <div class="wrap">
+    <div class="page-header">
+      <div class="page-brand">Bea Janer</div>
+      <div class="page-step">Paso 1 de 2</div>
+    </div>
+    <h2 class="datos-title">Tus datos personales</h2>
+    <p class="datos-sub">Esta información es necesaria para personalizar tu valoración y para que Bea pueda preparar tu sesión de trabajo.</p>
+    <div class="form-group">
+      <label class="form-label">Nombre completo *</label>
+      <input class="form-input" type="text" id="f-nombre" placeholder="Tu nombre y apellidos">
+      <div class="form-error" id="err-nombre">Por favor introduce tu nombre completo</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tu número de WhatsApp *</label>
+      <input class="form-input" type="tel" id="f-tel" placeholder="Ej: 612345678">
+      <div class="form-error" id="err-tel">Por favor introduce tu número de WhatsApp</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Fecha de nacimiento</label>
+        <input class="form-input" type="date" id="f-fnac">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hora de nacimiento</label>
+        <input class="form-input" type="time" id="f-hnac">
+      </div>
+    </div>
+    <div class="form-error" id="err-fnac" style="margin-top:-12px;margin-bottom:8px">Campo obligatorio</div>
+    <div class="form-group">
+      <label class="form-label">Lugar de nacimiento *</label>
+      <input class="form-input" type="text" id="f-lugar" placeholder="Ciudad y país">
+      <div class="form-error" id="err-lugar">Campo obligatorio</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Fecha de hoy</label>
+      <input class="form-input" type="date" id="f-fecha">
+    </div>
+    <div class="datos-note">Esta información se enviara únicamente a Bea Janer para preparar tu sesión personalizada. No se comparte con terceros.</div>
+    <div style="text-align:center"><button class="btn-gold" onclick="goToQuiz()">Continuar al test</button></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <div class="wrap">
+    <div class="quiz-header">
+      <div class="quiz-brand">Bea Janer</div>
+      <div class="progress-wrap">
+        <span class="prog-count" id="prog-count">0/50</span>
+        <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      </div>
+    </div>
+    <div id="questions"></div>
+    <div class="error-msg" id="error-msg"></div>
+    <div class="submit-wrap"><button class="btn-gold" onclick="submitQuiz()">Ver mi resultado</button></div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" class="screen">
+  <div class="wrap">
+    <div class="results-hero">
+      <svg width="40" height="40" viewBox="0 0 64 64" fill="none" style="margin-bottom:22px">
+        <polygon points="32,4 60,56 4,56" stroke="#e8d4a8" stroke-width="1" fill="none" opacity="0.9"/>
+        <polygon points="32,60 4,8 60,8" stroke="#e8d4a8" stroke-width="1" fill="none" opacity="0.7"/>
+        <circle cx="32" cy="32" r="4" fill="#c9a96e" opacity="0.9"/>
+      </svg>
+      <div class="eyebrow">Bea Janer - Valoración Energética</div>
+      <div class="results-name" id="results-name"></div>
+      <div class="results-sub" id="results-sub"></div>
+      <div class="results-date" id="results-date"></div>
+    </div>
+    <div id="results-content"></div>
+  </div>
+</div>
+
+<script>
+var DATA = [
+  {id:"pulmones",label:"Pulmones",name:"Espacio vital",essence:"No puedo respirar mi vida cómo es.",why:"Tu campo energético acumula tristeza no expresada, duelos sin procesar y una sensación de no tener espacio propio. Llevas tiempo conteniéndote y adaptándote, y eso ha ido cerrando tu capacidad de recibir y disfrutar la vida.",área:"Espacio Vital",estrés:"Tristeza sostenida, duelos no expresados, perdidas no asímiladas, sensación de ahogo emociónal, vivir sin espacio propio.",benefits:["Recuperar la ilusión y las ganas de vivir","Soltar lo que pesa sin esfuerzo","Sentir que tienes espacio propio","Alivio de la sensación de opresion interna","Volver a disfrutar del presente"],phrases:["No tengo aire","Me siento ahogada","No tengo espacio","Siempre estoy conteniendo","Me cuesta disfrutar"]},
+  {id:"tiroides",label:"Tiroides",name:"Ritmo vital",essence:"No puedo vivir ni expresarme a mi ritmo.",why:"Hay una tensión acumulada entre lo que sientes y lo que te permites decir o hacer. Te has adaptado al ritmo de los demás durante demásiado tiempo, callando, esperando o frenándote.",área:"Ritmo Interno",estrés:"Sensación de llegar tarde a la propia vida, vivir con prisa interna, bloqueo para avanzar o decidir, miedo a expresarse libremente, conflictos con la autoexpresión.",benefits:["Recuperar tu ritmo natural","Expresarte con autenticidad","Avanzar con claridad en proyectos","Dejar de sentir que vas tarde","Coherencia entre sentir, pensar y actuar"],phrases:["Voy tarde","Ya lo haré más adelante","No me atrevo a decirlo","Me cuesta arrancar","No es el momento"]},
+  {id:"estomago",label:"Estómago",name:"Integración interna",essence:"Esto no me sienta bien, pero lo aguanto.",why:"Tu centro emociónal esta sobrecargado de situaciónes que no has podido digerir ni aceptar. Hay tensión constante entre lo que sientes por dentro y lo que asumes o aguantas por fuera.",área:"Integración Emociónal",estrés:"Situaciónes que no se pueden digerir, conflictos vividos en silencio, tragar emociónes para evitar problemás, aceptar por obligacion, vivir bajo presion constante.",benefits:["Reducir la ansiedad y el nudo interior","Recuperar la confianza en tu intuición","Calma interna sostenida","Capacidad de aceptar sin perder tu centro","Dejar de que todo te afecte en exceso"],phrases:["No lo trago","Tengo un nudo en el estómago","Todo me afecta","Me revuelve el estómago","Estoy muy nerviosa"]},
+  {id:"pancreas",label:"Páncreas",name:"Disfrute y merecimiento",essence:"No me permito disfrutar ni relajarme.",why:"Hay una carga profunda de autoexigencia que te impide sentir la vida con dulzura. La sensación de que debes merecer antes de recibir, o de que relajarte no esta permitido, genera un estrés crónico.",área:"Merecimiento y Disfrute",estrés:"Falta de alegria sostenida, autocastigo emociónal, exceso de control, sentimiento de no merecer, desilusiones profundas, dificultad para disfrutar sin culpa.",benefits:["Disfrutar sin culpa y recibir con naturalidad","Soltar el exceso de control","Reconectar con la alegría","Mejorar la relación con la abundancia","Sentirte merecedora de lo bueno"],phrases:["No me lo merezco","Cuando termine ya disfrutaré","No puedo bajar la guardia","Siempre hay algo que corregir","No puedo permitirme fallar"]},
+  {id:"higado",label:"Hígado",name:"Dirección vital",essence:"No puedo ser quien realmente soy.",why:"Llevas acumulando rabia contenida, frustraciónes no expresadas e injusticias que no has podido soltar. Esa energía atrapada bloquea tu impulso vital: la capacidad de decidir con claridad y avanzar hacia lo que quieres.",área:"Impulso y Dirección Vital",estrés:"Frustración sostenida, ira contenida o reprimida, miedo a la pobreza, sensación de injusticia, conflictos no resueltos, límites no expresados, vivir haciendo lo que toca.",benefits:["Liberar la rabia y la frustración","Recuperar el impulso para avanzar","Tomar decisiónes con claridad","Dejar de sentir que la vida es injusta","Recuperar tu poder personal"],phrases:["Esto no es justo","Me lo tengo que tragar","Siempre me toca a mí","No puedo decir lo que pienso","Me hierve la sangre"]},
+  {id:"intestino",label:"Intestino",name:"Soltar el pasado",essence:"Esto no lo puedo aceptar, pero tampoco lo puedo soltar.",why:"Hay situaciónes, traiciones o secretos del pasado que no han podido ser procesados ni liberados. Esa carga genera apego, dificultad para cerrar ciclos y la sensación de cargar con lo que no te corresponde.",área:"Liberación y Cierre de Ciclos",estrés:"Apegos al pasado, conflictos de traicion o deslealtad, secretos del sistema familiar, situaciónes vividas cómo injustas, dificultad para cerrar ciclos.",benefits:["Soltar el pasado con ligereza","Cerrar ciclos abiertos","Liberar cargas del linaje","Recuperar el perdón y perdónarte","Sentir ligereza interior"],phrases:["Hay cosas que no perdono","Me cuesta soltar","Siempre tengo que cargar yo","Hay cosas de mi familia que no acepto","Perdono pero no olvido"]},
+  {id:"utero",label:"Útero",name:"Poder femenino",essence:"No puedo ser yo del todo.",why:"Hay una desconexión con tu energía femenina más profunda: tu identidad, tu creatividad y tu capacidad de recibir. Memorias del linaje, bloqueos creativos o situaciónes vividas te han alejado de tu propio centro.",área:"Poder Femenino",estrés:"Conflictos con la energía femenina, frustración sexual, culpa asociada al placer, vivencias de invasíon emociónal o física, perdidas no integradas, memorias del linaje femenino.",benefits:["Reconectar con tu creatividad","Recuperar el placer de recibir","Liberar memorias del linaje femenino","Sentirte habitada y en tu lugar","Romper patrones que no comprendes"],phrases:["No me siento en mi cuerpo","No sé lo que quiero","Algo en mí está bloqueado","No tengo espacio para mí","Siempre me dejo para el final"]},
+  {id:"corazón",label:"Corazón",name:"Amor propio",essence:"Mi corazón ha cargado demásiado.",why:"Tu corazón energético ha dado mucho más de lo que ha recibido y lleva tiempo cerrándose para protegerse. Hay heridas afectivas acumuladas que generan vacío, invisibilidad y dificultad para volver a abrirte.",área:"Apertura del Corazón",estrés:"Tristeza profunda sostenida, desilusiones afectivas, traiciones emociónales, amor dado sin retorno, exceso de responsabilidad emociónal, vivir para otros olvidandose de uno mismo.",benefits:["Sanar heridas afectivas","Recuperar el equilibrio entre dar y recibir","Abrirte de nuevo sin miedo","Sentirte vista y querida","Recuperar la alegría y la paz interior"],phrases:["Doy mucho y recibo poco","Me siento vacía","Me siento invisible","No quiero ilusionarme","Me cuesta abrir el corazón"]},
+  {id:"rinones",label:"Riñones",name:"Seguridad vital",essence:"Si fallo, me caigo.",why:"Llevas demásiado tiempo en modo supervivencia: sintiéndote sola ante todo, con miedo al futuro y la sensación de que si aflojas todo se derrumba. Esa alerta constante agota tu energía más primaria.",área:"Seguridad Interior",estrés:"Miedo al futuro, miedo a no llegar, miedo a perder estabilidad economica o familiar, sensación de tener que hacerlo todo sola, vivir en modo resistencia.",benefits:["Recuperar la calma y salir del modo alerta","Confiar en la vida y en ti misma","Soltar el miedo al futuro","Recuperar energía vital","Sentir que la vida te sostiene"],phrases:["No puedo más","Si no lo hago yo no lo hace nadie","Tengo miedo a que todo se desmorone","Siempre voy justa","No llego"]},
+  {id:"cabeza",label:"Cabeza",name:"Claridad mental",essence:"No paro de pensar y no encuentro claridad.",why:"Tu eje mental está sobrecargado: pensamientos en bucle, saturación, dificultad para decidir y una mente que no descansa. Esta desconexión entre mente y cuerpo genera niebla mental e indecisión constante.",área:"Claridad Mental",estrés:"Ruido mental constante, sensación de bloqueo o niebla mental, dificultad para tomar decisiónes claras, pensar demásiado antes de actuar, mente que nunca se apaga.",benefits:["Calmar el ruido mental","Tomar decisiónes con claridad","Recuperar la concentracion","Descansar de verdad","Sentirte centrada y ordenada"],phrases:["No paro de pensar","Le doy vueltas a todo","No puedo desconectar","No sé qué decisión tomar","Estoy saturada"]}
+];
+
+var SCALE = [
+  {val:1,lbl:"Nunca",cls:"sel-1"},
+  {val:2,lbl:"Poco",cls:"sel-2"},
+  {val:3,lbl:"A veces",cls:"sel-3"},
+  {val:4,lbl:"Bastante",cls:"sel-4"},
+  {val:5,lbl:"Siempre",cls:"sel-5"}
+];
+
+var answers = {};
+var TOTAL = DATA.length * 5;
+var userData = {};
+var cachedWABea = '';
+var cachedWAClient = '';
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goToDatos(){
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('f-fecha').value = today;
+  show('datos');
+}
+
+function goToQuiz(){
+  var ok = true;
+  var nombre = document.getElementById('f-nombre').value.trim();
+  var tel    = document.getElementById('f-tel').value.trim();
+  var fnac   = document.getElementById('f-fnac').value;
+  var lugar  = document.getElementById('f-lugar').value.trim();
+  if(!nombre){ document.getElementById('err-nombre').style.display='block'; ok=false; } else document.getElementById('err-nombre').style.display='none';
+  if(!tel)   { document.getElementById('err-tel').style.display='block';    ok=false; } else document.getElementById('err-tel').style.display='none';
+  if(!fnac)  { document.getElementById('err-fnac').style.display='block';   ok=false; } else document.getElementById('err-fnac').style.display='none';
+  if(!lugar) { document.getElementById('err-lugar').style.display='block';  ok=false; } else document.getElementById('err-lugar').style.display='none';
+  if(!ok) return;
+  userData = {
+    nombre: nombre,
+    tel:    tel.replace(/\D/g,''),
+    fnac:   fnac,
+    hnac:   document.getElementById('f-hnac').value || 'No indicada',
+    lugar:  lugar,
+    fecha:  document.getElementById('f-fecha').value || new Date().toISOString().split('T')[0]
+  };
+  buildQuestions();
+  show('quiz');
+}
+
+function buildQuestions(){
+  var container = document.getElementById('questions');
+  container.innerHTML = '';
+  var num = 0;
+  DATA.forEach(function(organ){
+    organ.phrases.forEach(function(phrase, pi){
+      num++;
+      var key = organ.id + '_' + pi;
+      var card = document.createElement('div');
+      card.className = 'q-card';
+      card.id = 'card_' + key;
+      var btns = '';
+      SCALE.forEach(function(s){
+        btns += '<button class="scale-btn" id="btn_' + key + '_' + s.val + '" onclick="pick(\'' + key + '\',' + s.val + ')">';
+        btns += '<span class="s-num">' + s.val + '</span>';
+        btns += '<span class="s-lbl">' + s.lbl + '</span>';
+        btns += '</button>';
+      });
+      card.innerHTML =
+        '<div class="q-num">' + num + ' de 50</div>' +
+        
+        '<div class="q-phrase">"' + phrase + '"</div>' +
+        '<div class="scale-row">' + btns + '</div>';
+      container.appendChild(card);
+    });
+  });
+}
+
+function pick(key, val){
+  var prev = answers[key];
+  if(prev){
+    var old = document.getElementById('btn_' + key + '_' + prev);
+    if(old) old.className = 'scale-btn';
+  }
+  answers[key] = val;
+  var cls = '';
+  SCALE.forEach(function(s){ if(s.val === val) cls = s.cls; });
+  var btn = document.getElementById('btn_' + key + '_' + val);
+  if(btn) btn.className = 'scale-btn ' + cls;
+  var count = Object.keys(answers).length;
+  document.getElementById('prog-count').textContent = count + '/50';
+  document.getElementById('prog-fill').style.width = Math.round((count/TOTAL)*100) + '%';
+}
+
+function submitQuiz(){
+  var count = Object.keys(answers).length;
+  if(count < TOTAL){
+    var err = document.getElementById('error-msg');
+    err.textContent = 'Faltan ' + (TOTAL-count) + ' frases por valorar.';
+    err.style.display = 'block';
+    for(var oi=0; oi<DATA.length; oi++){
+      for(var pi=0; pi<DATA[oi].phrases.length; pi++){
+        var key = DATA[oi].id + '_' + pi;
+        if(!answers[key]){
+          var el = document.getElementById('card_' + key);
+          if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+          return;
+        }
+      }
+    }
+    setTimeout(function(){ err.style.display='none'; }, 4000);
+    return;
+  }
+  var scores = DATA.map(function(organ){
+    var total = 0;
+    organ.phrases.forEach(function(p,i){ total += (answers[organ.id+'_'+i] || 0); });
+    return { organ:organ, score:total, pct:Math.round((total/(organ.phrases.length*5))*100) };
+  });
+  scores.sort(function(a,b){ return b.score - a.score; });
+  buildMessages(scores);
+  showResults(scores);
+}
+
+function urgencyData(pct){
+  if(pct>=81) return {label:'Estrés prioritario', cls:'urgency-critico'};
+  if(pct>=61) return {label:'Estrés activo',      cls:'urgency-activo'};
+  if(pct>=41) return {label:'Estrés latente',     cls:'urgency-latente'};
+  return              {label:'Sin estrés significativo', cls:'urgency-leve'};
+}
+
+function fmtDate(d){
+  if(!d) return '';
+  var p = d.split('-');
+  if(p.length !== 3) return d;
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+function buildMessages(scores){
+  var u = userData;
+  var primary = scores[0];
+  var secondary = scores.filter(function(s,i){ return i>0 && s.pct>=41; });
+  var nombre1 = u.nombre.split(' ')[0];
+
+  // ── WhatsApp TECNICO para Bea (va al número de Bea) ──────────────────────
+  var wa = '';
+  wa += 'TEST ESTRÉS ORGÁNICO\n';
+  wa += '==============================\n\n';
+  wa += 'DATOS\n';
+  wa += 'Nombre: ' + u.nombre + '\n';
+  wa += 'Tel: ' + u.tel + '\n';
+  wa += 'Nacimiento: ' + fmtDate(u.fnac) + ' - ' + u.hnac + '\n';
+  wa += 'Lugar: ' + u.lugar + '\n';
+  wa += 'Fecha test: ' + fmtDate(u.fecha) + '\n\n';
+  wa += '==============================\n';
+  wa += 'ÁREA PRIORITARIA - ' + urgencyData(primary.pct).label.toUpperCase() + '\n';
+  wa += '==============================\n';
+  wa += primary.organ.name + ' - ' + primary.pct + '%\n';
+  wa += 'Frase: "' + primary.organ.essence + '"\n';
+  wa += 'Área de trabajo: ' + primary.organ.área + '\n';
+  wa += 'Estrés acumulado: ' + primary.organ.estrés + '\n';
+  wa += 'Descripcion: ' + primary.organ.why + '\n';
+  wa += 'Beneficios:\n';
+  primary.organ.benefits.forEach(function(b){ wa += '- ' + b + '\n'; });
+  wa += '\n';
+  if(secondary.length > 0){
+    wa += '==============================\n';
+    wa += 'TAMBIÉN A TRABAJAR\n';
+    wa += '==============================\n';
+    secondary.slice(0,4).forEach(function(s2){
+      wa += '\n' + s2.organ.name + ' - ' + s2.pct + '% - ' + urgencyData(s2.pct).label + '\n';
+      wa += 'Frase: "' + s2.organ.essence + '"\n';
+      wa += 'Área: ' + s2.organ.área + '\n';
+      wa += 'Estrés acumulado: ' + s2.organ.estrés + '\n';
+      wa += 'Descripcion: ' + s2.organ.why + '\n';
+      wa += 'Beneficios:\n';
+      s2.organ.benefits.forEach(function(b){ wa += '- ' + b + '\n'; });
+    });
+    wa += '\n';
+  }
+  wa += '==============================\n';
+  wa += 'MAPA COMPLETO (10 zonas)\n';
+  wa += '==============================\n';
+  scores.forEach(function(s2){
+    wa += s2.organ.name + ': ' + s2.pct + '% (' + urgencyData(s2.pct).label + ')\n';
+  });
+  wa += '\n==============================\n';
+  wa += 'Bea Janer - Terapeuta Holística\nTu tranquilidad no se improvisa.';
+  cachedWABea = encodeURIComponent(wa);
+
+  // ── WhatsApp CERCANO para la clienta (va al número de la clienta) ─────────
+  var wac = '';
+  wac += 'Hola ' + nombre1 + '!!\n\n';
+  wac += 'Gracias por hacer el test.\n\n';
+  wac += 'Aquí te paso un resumen de los resultados. Recuerda que esto es solo una valoración para que Bea pueda preparar la mejor terapia para tu caso concreto.\n\n';
+  wac += '------------------------------\n\n';
+  wac += 'LO QUE MÁS NECESITAS TRABAJAR\n\n';
+  wac += primary.organ.name + '\n';
+  wac += '"' + primary.organ.essence + '"\n\n';
+  wac += primary.organ.why + '\n\n';
+  wac += 'Qué puedes obtener al trabajarlo:\n';
+  primary.organ.benefits.forEach(function(b){ wac += '- ' + b + '\n'; });
+  if(secondary.length > 0){
+    wac += '\n------------------------------\n\n';
+    wac += 'TAMBIÉN A TENER EN CUENTA\n\n';
+    secondary.slice(0,3).forEach(function(s2){
+      wac += '- ' + s2.organ.name + '\n';
+      wac += '  "' + s2.organ.essence + '"\n\n';
+    });
+  }
+  wac += '\n------------------------------\n\n';
+  wac += 'Un abrazo, Bea.\n\n';
+  wac += 'Tu tranquilidad no se improvisa.';
+  cachedWAClient = encodeURIComponent(wac);
+}
+
+function sendWABea(){
+  window.open('https://wa.me/34648188488?text=' + cachedWABea, '_blank');
+}
+
+function showResults(scores){
+  show('results');
+  var primary = scores[0];
+  var secondary = scores.filter(function(s,i){ return i>0 && s.pct>=41; });
+  var uP = urgencyData(primary.pct);
+
+  document.getElementById('results-name').innerHTML = 'Valoración de <em>' + userData.nombre + '</em>';
+  document.getElementById('results-sub').textContent = 'Test realizado el ' + fmtDate(userData.fecha);
+  document.getElementById('results-date').textContent = 'Nacimiento: ' + fmtDate(userData.fnac) + ' - ' + userData.hnac + ' - ' + userData.lugar;
+
+  var html = '';
+
+  html += '<div class="sec-label">A trabajar prioritariamente</div>';
+  html += '<div class="primary-card">';
+  html += '<div class="score-row"><div class="score-bar-w"><div class="score-bar-f" style="width:' + primary.pct + '%"></div></div><div class="score-pct">' + primary.pct + '%</div></div>';
+  html += '<div class="urgency-badge ' + uP.cls + '">' + uP.label + '</div>';
+  html += '<div class="card-name">' + primary.organ.name + '</div>';html += '<div style="font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);opacity:0.8;margin-bottom:18px;">Órgano: ' + primary.organ.label + '</div>';
+  html += '<div class="card-essence">"' + primary.organ.essence + '"</div>';
+  html += '<div class="card-inner-label">Por qué necesitas trabajar esto</div>';
+  html += '<div class="card-text">' + primary.organ.why + '</div>';
+  html += '<div class="card-inner-label">Qué puedes obtener al trabajarlo</div>';
+  html += '<ul class="benefit-list">';
+  primary.organ.benefits.forEach(function(b){ html += '<li>' + b + '</li>'; });
+  html += '</ul></div>';
+
+  if(secondary.length > 0){
+    html += '<div class="sec-label" style="margin-top:32px">También a trabajar</div>';
+    secondary.slice(0,4).forEach(function(s2, idx){
+      var u2 = urgencyData(s2.pct);
+      html += '<div class="secondary-card">';
+      html += '<div class="sec-card-head"><div><div class="sec-rank">' + u2.label + '</div><div class="sec-name">' + s2.organ.name + '</div><div class="sec-organ-lbl">' + s2.organ.label + '</div></div><div class="sec-pct">' + s2.pct + '%</div></div>';
+      html += '<div class="mini-bar"><div class="mini-bar-f" style="width:' + s2.pct + '%"></div></div>';
+      html += '<div class="sec-essence">"' + s2.organ.essence + '"</div>';
+      html += '<div class="sec-text">' + s2.organ.why + '</div>';
+      html += '</div>';
+    });
+  }
+
+  // ── MAPA COMPLETO ────────────────────────────────────────────────────────
+  html += '<div style="margin-top:52px">';
+  html += '<div class="sec-label">Mapa completo</div>';
+  html += '<div style="border:1px solid rgba(201,169,110,0.15);background:#141310;padding:28px 24px;">';
+  scores.forEach(function(s2, i){
+    var barColor = i===0 ? 'linear-gradient(to right,#e8d4a8,#f0e8d8)' : '#c9a96e';
+    var nameColor = i===0 ? '#f0e8d8' : '#b8a88a';
+    var pctColor  = i===0 ? '#c9a96e' : '#c9a96e';
+    var nameFw    = i===0 ? '400' : '300';
+    html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:' + (i===scores.length-1?'0':'16px') + ';">';
+    html += '<div style="width:155px;flex-shrink:0;font-size:15px;color:' + nameColor + ';font-weight:' + nameFw + ';line-height:1.3;font-family:Jost,sans-serif;">' + s2.organ.name + '</div>';
+    html += '<div style="flex:1;height:3px;background:rgba(255,255,255,0.07);"><div style="height:100%;width:' + s2.pct + '%;background:' + barColor + ';"></div></div>';
+    html += '<div style="min-width:44px;text-align:right;font-family:\'Cormorant Garamond\',serif;font-size:17px;color:' + pctColor + ';">' + s2.pct + '%</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  // ── SEND BOX ─────────────────────────────────────────────────────────────
+  html += '<div style="border:1px solid rgba(201,169,110,0.15);background:#141310;padding:36px 24px;margin-top:32px;text-align:center;">';
+  html += '<div style="font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:#c9a96e;margin-bottom:18px;font-family:Jost,sans-serif;">Enviar Resultados</div>';
+  html += '<p style="font-size:14px;color:#b8a88a;line-height:1.75;max-width:300px;margin:0 auto 28px;text-align:center;font-family:Jost,sans-serif;">Envía tu resultado a Bea y recibe también una copia en tu WhatsApp.</p>';
+  html += '<button onclick="sendWABea()" style="border:none;color:#fff;font-family:Jost,sans-serif;font-weight:400;font-size:16px;padding:18px 36px;cursor:pointer;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;gap:12px;width:100%;max-width:340px;background:#25D366;"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Enviar resultado a Bea</button>';
+  html += '</div>';
+
+  // ── FOOTER ───────────────────────────────────────────────────────────────
+  html += '<div class="footer" style="text-align:center;">';
+  html += '<p style="text-align:center;margin:0 auto;">Este test es una valoración para que Bea Janer estudie tu caso y pueda preparar el mejor tratamiento posible para tu situación.</p>';
+  html += '<p style="margin-top:40px;margin-bottom:40px;font-style:italic;color:var(--gold);font-family:\'Cormorant Garamond\',serif;font-size:20px;letter-spacing:.05em;line-height:1.5;text-align:center;">Tu tranquilidad no se improvisa.</p>';
+  html += '<div style="text-align:center;display:flex;justify-content:center;"><button class="btn-ghost" onclick="restart()">Repetir test</button></div>';
+  html += '</div>';
+
+    document.getElementById('results-content').innerHTML = html;
+}
+
+function restart(){
+  answers = {};
+  userData = {};
+  cachedWABea = '';
+  cachedWAClient = '';
+  document.getElementById('questions').innerHTML = '';
+  document.getElementById('results-content').innerHTML = '';
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-count').textContent = '0/50';
+  ['f-nombre','f-tel','f-fnac','f-hnac','f-lugar'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  show('intro');
+}
+</script>
+</body>
+</html>
